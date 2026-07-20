@@ -1,0 +1,7 @@
+{
+    "retention_days": 30,
+    "compression": "gzip",
+    "versioning": true,
+    "encryption": "AES256",
+    "storage_class": "STANDARD"
+}

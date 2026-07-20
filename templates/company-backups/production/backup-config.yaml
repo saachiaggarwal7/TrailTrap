@@ -1,0 +1,18 @@
+backup:
+  enabled: true
+  schedule: "0 2 * * *"
+
+storage:
+  provider: aws-s3
+  bucket: company-backups-archive-v1-fc
+  compression: gzip
+
+database:
+  host: mysql-prod.internal
+  port: 3306
+
+notifications:
+  email: infra-team@fincore.internal
+
+retention:
+  days: 30
