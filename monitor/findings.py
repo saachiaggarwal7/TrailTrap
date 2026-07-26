@@ -1,3 +1,8 @@
+import json
+import os
+
+FINDINGS_FILE="findings.jsonl"
+
 def create_finding(event_details,reputation):
     if reputation is None:
         return None
@@ -19,3 +24,13 @@ def create_finding(event_details,reputation):
         "abuse_score":reputation['abuse_score'],
         "is_tor":reputation['is_tor']
     }
+
+def save_finding(finding):
+    if os.path.exists(FINDINGS_FILE):
+        with open(FINDINGS_FILE,'r') as file:
+            findings=json.load(file)
+    else:
+        findings=[]
+    findings.append(finding)
+    with open(FINDINGS_FILE,'w') as file:
+        json.dump(findings, file, indent=4, default=str)
