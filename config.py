@@ -84,4 +84,5 @@ HONEY_USERS = [
     }
 
 ]
-HONEY_USERNAME=["backup-admin","old-deployment-user","legacy-service"]
+HONEY_USERNAMES=["backup-admin","old-deployment-user","legacy-service"]
+HONEY_BUCKETNAMES=["company-backups-archive-v1-fc","finance-reports-storage-v1-fc"]
