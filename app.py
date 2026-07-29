@@ -1,4 +1,4 @@
-from flask import Flask, render_template,send_file
+from flask import Flask, render_template,send_file,request
 import json
 import csv
 from config import HONEY_BUCKETNAMES,HONEY_USERNAMES,HONEY_USERS
@@ -23,9 +23,39 @@ def dashboard():
     "SG": "Singapore",
     "GB": "United Kingdom",
     "JP": "Japan"
-}
+    }
     # Statistics
-    total_findings = len(findings)
+    severity_filter = request.args.get("severity", "")
+    country_filter = request.args.get("country", "")
+    user_filter = request.args.get("user", "")
+    filtered_findings = findings
+    if severity_filter:
+        filtered_findings = [
+        f for f in filtered_findings
+        if f["severity"] == severity_filter
+        ]
+
+    if country_filter:
+        filtered_findings = [
+        f for f in filtered_findings
+        if f["country"] == country_filter
+        ]
+    if user_filter:
+        filtered_findings = [
+        f for f in filtered_findings
+        if f["username"] == user_filter
+        ]
+    severity_options = sorted(
+    set(f["severity"] for f in findings)
+    )
+    country_options = sorted(
+    set(f["country"] for f in findings)
+    )
+    user_options = sorted(
+    set(f["username"] for f in findings)
+    )
+
+    total_findings = len(filtered_findings)
 
     critical_count = sum(
         1 for f in findings
@@ -58,7 +88,6 @@ def dashboard():
             sum(f["abuse_score"] for f in findings) / len(findings),
             1
         )if findings else 0)
-    print("TOR Nodes:", tor_nodes)
     return render_template(
         "index.html",
         total_findings=total_findings,
@@ -77,7 +106,13 @@ def dashboard():
         unique_ips=unique_ips,
         max_abuse_score=max_abuse_score,
         tor_nodes=tor_nodes,
-        average_abuse_score=average_abuse_score
+        average_abuse_score=average_abuse_score,
+        severity_options=severity_options,
+        country_options=country_options,
+        user_options=user_options,
+        severity_filter=severity_filter,
+        country_filter=country_filter,
+        user_filter=user_filter,
     )
 
 
