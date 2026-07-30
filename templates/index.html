@@ -1,0 +1,603 @@
+<!DOCTYPE html><html class="dark" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>TrailTrap | Cloud Deception &amp; Threat Monitoring</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary": "#233144",
+                        "error": "#ffb4ab",
+                        "background": "#0B1220",
+                        "on-background": "#e0e3e5",
+                        "surface-container-high": "#272a2c",
+                        "surface-container": "#1d2022",
+                        "on-secondary-container": "#aeb9d0",
+                        "outline-variant": "#45464c",
+                        "surface-variant": "#323537",
+                        "on-surface-variant": "#c6c6cd",
+                        "secondary-fixed": "#d8e3fb",
+                        "on-primary-fixed-variant": "#414658",
+                        "on-error-container": "#ffdad6",
+                        "on-error": "#690005",
+                        "tertiary-fixed": "#d5e3fd",
+                        "on-primary": "#2a3040",
+                        "primary": "#c1c6db",
+                        "on-primary-fixed": "#151b2b",
+                        "tertiary-container": "#031224",
+                        "on-tertiary-container": "#707e94",
+                        "inverse-primary": "#585e70",
+                        "inverse-on-surface": "#2d3133",
+                        "secondary": "#bcc7de",
+                        "on-secondary-fixed-variant": "#3c475a",
+                        "inverse-surface": "#e0e3e5",
+                        "secondary-fixed-dim": "#bcc7de",
+                        "surface-bright": "#363a3b",
+                        "surface-dim": "#101415",
+                        "primary-container": "#0b1120",
+                        "on-secondary": "#263143",
+                        "surface-container-low": "#191c1e",
+                        "on-tertiary-fixed-variant": "#3a485c",
+                        "surface-tint": "#c1c6db",
+                        "on-primary-container": "#777c90",
+                        "on-secondary-fixed": "#111c2d",
+                        "tertiary-fixed-dim": "#b9c7e0",
+                        "surface": "#101415",
+                        "primary-fixed": "#dde2f8",
+                        "surface-container-highest": "#323537",
+                        "on-tertiary-fixed": "#0d1c2f",
+                        "on-surface": "#e0e3e5",
+                        "secondary-container": "#3e495d",
+                        "primary-fixed-dim": "#c1c6db",
+                        "tertiary": "#b9c7e0",
+                        "outline": "#909097",
+                        "error-container": "#93000a",
+                        "surface-container-lowest": "#0b0f10"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "16px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "unit-xl": "48px",
+                        "unit-sm": "8px",
+                        "margin-desktop": "32px",
+                        "container-max": "1440px",
+                        "unit-xs": "4px",
+                        "gutter": "24px",
+                        "unit-md": "16px",
+                        "margin-tablet": "24px",
+                        "unit-lg": "24px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-md": ["JetBrains Mono"],
+                        "headline-md": ["Inter"],
+                        "label-sm": ["JetBrains Mono"],
+                        "headline-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "500"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #0B1220;
+            color: #e0e3e5;
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .card {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 0.2s ease;
+        }
+        .card:hover {
+            border-color: #475569;
+        }
+        .status-badge {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.4);
+            color: #4ade80;
+        }
+        .severity-critical { background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; color: #f87171; }
+        .severity-high { background: rgba(249, 115, 22, 0.15); border: 1px solid #f97316; color: #fb923c; }
+        .severity-medium { background: rgba(234, 179, 8, 0.15); border: 1px solid #eab308; color: #facc15; }
+        
+        .abuse-low { background: rgba(34, 197, 94, 0.15); border: 1px solid #22c55e; color: #4ade80; }
+        .abuse-mid { background: rgba(249, 115, 22, 0.15); border: 1px solid #f97316; color: #fb923c; }
+        .abuse-high { background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; color: #f87171; }
+
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+    </style>
+</head>
+<body class="flex overflow-hidden h-screen">
+<!-- Sidebar -->
+
+<!-- Main Content -->
+<main class="flex-1 flex flex-col min-w-0 overflow-y-auto custom-scrollbar">
+<!-- Header -->
+<header class="flex justify-between items-center w-full px-margin-desktop h-20 bg-background/80 backdrop-blur-md border-b border-outline-variant shrink-0 sticky top-0 z-10">
+<div class="flex items-center gap-6">
+<div class="flex flex-col">
+<h2 class="text-title-lg font-title-lg font-bold text-on-surface leading-tight">TrailTrap</h2>
+<p class="text-label-sm text-on-surface-variant uppercase tracking-wider font-medium"><span style="font-size: 10px; font-weight: 700; letter-spacing: 1px; background-color: rgb(25, 28, 30);" class="">Cloud Deception &amp; Threat Monitoring</span></p>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 bg-surface-container-low px-4 py-2 rounded-full border border-outline-variant/40">
+<div class="flex flex-col items-start leading-none">
+<span class="text-[11px] font-bold text-emerald-400 flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>Monitoring Active
+                        </span>
+<span class="text-[10px] text-on-surface-variant mt-1">Last Event: {{latest_event_time}}</span>
+</div>
+<button class="p-1 hover:bg-surface-variant rounded-full text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[18px]">refresh</span>
+</button>
+</div>
+<div class="flex gap-2">
+<button class="p-2.5 bg-surface-container hover:bg-surface-variant text-on-surface-variant rounded-xl border border-outline-variant/30 transition-all">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+<button class="p-2.5 bg-surface-container hover:bg-surface-variant text-on-surface-variant rounded-xl border border-outline-variant/30 transition-all">
+<span class="material-symbols-outlined text-[20px]">help</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Dashboard Content -->
+<div class="p-margin-desktop space-y-gutter max-w-[1600px] mx-auto w-full">
+<!-- Top Stats -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<div class="card p-5">
+<div class="flex justify-between items-start mb-2">
+<span class="text-label-md font-bold text-on-surface-variant">Total Security Findings</span>
+<span class="material-symbols-outlined text-primary/40">radar</span>
+</div>
+<div class="text-[32px] font-bold text-on-surface leading-tight"> {{ total_findings }}</div>
+<div class="text-[10px] text-on-surface-variant/60 font-medium mt-1">Updated Automatically</div>
+</div>
+<div class="card p-5 border-l-4 border-l-red-500">
+<div class="flex justify-between items-start mb-2">
+<span class="text-label-md font-bold text-on-surface-variant">Critical Findings</span>
+<span class="material-symbols-outlined text-red-500/40">warning</span>
+</div>
+<div class="text-[32px] font-bold text-on-surface leading-tight text-red-100">{{ critical_count }}</div>
+<div class="text-[10px] text-on-surface-variant/60 font-medium mt-1">Updated Automatically</div>
+</div>
+<div class="card p-5 border-l-4 border-l-orange-500">
+<div class="flex justify-between items-start mb-2">
+<span class="text-label-md font-bold text-on-surface-variant">High Findings</span>
+<span class="material-symbols-outlined text-orange-500/40">priority_high</span>
+</div>
+<div class="text-[32px] font-bold text-on-surface leading-tight text-orange-100">{{ high_count }}</div>
+<div class="text-[10px] text-on-surface-variant/60 font-medium mt-1">Updated Automatically</div>
+</div>
+<div class="card p-5 border-l-4 border-l-yellow-500">
+<div class="flex justify-between items-start mb-2">
+<span class="text-label-md font-bold text-on-surface-variant">Medium Findings</span>
+<span class="material-symbols-outlined text-yellow-500/40">info</span>
+</div>
+<div class="text-[32px] font-bold text-on-surface leading-tight text-yellow-100">{{ medium_count }}</div>
+<div class="text-[10px] text-on-surface-variant/60 font-medium mt-1">Last Updated :{{ latest_event_time }}</div>
+</div>
+</div>
+<!-- Latest Detection Card (New Feature) -->
+<div class="card bg-red-950/10 border-red-500/30 overflow-hidden">
+<div class="px-6 py-3 bg-red-500/10 border-b border-red-500/20 flex justify-between items-center">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+<h3 class="text-label-md font-bold text-red-400 uppercase tracking-widest">Latest Detection Incident</h3>
+</div>
+<span class="text-label-sm text-red-400/70 font-mono">ID: DET-{{total_findings}}</span>
+</div>
+<div class="p-6">
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-6 items-center">
+<div class="flex flex-col gap-1">
+<span class="text-[10px] uppercase text-on-surface-variant font-bold">Severity</span>
+<span class="
+{% if latest_finding.severity == 'Critical' %}
+severity-critical
+{% elif latest_finding.severity == 'High' %}
+abuse-high
+{% else %}
+bg-yellow-500 text-black
+{% endif %}
+px-2 py-0.5 rounded text-[10px] font-bold text-center w-fit">
+    {{ latest_finding.severity }}
+</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-[10px] uppercase text-on-surface-variant font-bold">IAM User</span>
+<span class="text-label-md font-bold text-primary truncate">{{latest_finding.username}}</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-[10px] uppercase text-on-surface-variant font-bold">Honey Bucket</span>
+<span class="text-label-md text-on-surface truncate">N/A</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-[10px] uppercase text-on-surface-variant font-bold">AWS Action</span>
+<span class="text-label-md text-on-surface italic truncate">{{ latest_finding.event_name }}</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-[10px] uppercase text-on-surface-variant font-bold">Country</span>
+<span class="text-label-md text-on-surface">{{ latest_finding.country }}</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-[10px] uppercase text-on-surface-variant font-bold">Source IP</span>
+<span class="text-label-md font-mono text-on-surface">{{ latest_finding.source_ip }}</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-[10px] uppercase text-on-surface-variant font-bold">Abuse Score</span>
+<span class="abuse-high px-2 py-0.5 rounded text-[10px] font-bold text-center w-fit">{{ latest_finding.abuse_score }}/100</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-[10px] uppercase text-on-surface-variant font-bold">Detection Time</span>
+<span class="text-label-md text-on-surface whitespace-nowrap">{{ latest_finding.event_time }}</span>
+</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Honey Assets Widget (New Widget) -->
+<div class="lg:col-span-3 card">
+<div class="px-unit-md py-4 border-b border-outline-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">inventory_2</span>
+<h3 class="text-body-lg font-bold">Honey Assets</h3>
+</div>
+<div class="p-unit-md space-y-4">
+<div class="flex items-center justify-between p-3 bg-surface-container-low rounded-lg border border-outline-variant/30">
+<div class="flex flex-col">
+<span class="text-label-sm text-on-surface-variant">Honey IAM Users</span>
+<span class="text-headline-md font-bold text-primary">{{honey_users}}</span>
+</div>
+<span class="material-symbols-outlined text-primary/40">person_add</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container-low rounded-lg border border-outline-variant/30">
+<div class="flex flex-col">
+<span class="text-label-sm text-on-surface-variant">Honey Buckets</span>
+<span class="text-headline-md font-bold text-primary">{{honey_buckets}}</span>
+</div>
+<span class="material-symbols-outlined text-primary/40">folder_zip</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container-low rounded-lg border border-outline-variant/30">
+<div class="flex flex-col">
+<span class="text-label-sm text-on-surface-variant">Decoy Files</span>
+<span class="text-headline-md font-bold text-primary">{{decoy_files}}</span>
+</div>
+<span class="material-symbols-outlined text-primary/40">description</span>
+</div>
+</div>
+</div>
+<!-- Top Sources -->
+ <div class="p-unit-md space-y-5">
+
+{% for country, hits in top_countries %}
+
+<div class="space-y-2">
+
+    <div class="flex justify-between text-label-md text-on-surface-variant font-medium">
+
+        <span>
+            {{ COUNTRY_NAMES.get(country, country) }}
+        </span>
+
+        <span>
+            {{ hits }} hit{{ '' if hits == 1 else 's' }}
+        </span>
+
+    </div>
+
+    <div class="h-2 bg-slate-800 rounded-full overflow-hidden">
+
+        <div
+            class="h-full bg-primary rounded-full shadow-[0_0_8px_rgba(193,198,219,0.3)]"
+            style="width: {{ (hits / max_country_hits) * 100 }}%">
+        </div>
+
+    </div>
+
+</div>
+
+{% endfor %}
+
+</div>
+<!-- Threat Intel -->
+<div class="lg:col-span-3 card">
+<div class="px-unit-md py-4 border-b border-outline-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">insights</span>
+<h3 class="text-body-lg font-bold">Threat Intelligence</h3>
+</div>
+<div class="p-unit-md grid grid-cols-1 gap-3">
+<div class="p-4 bg-slate-800/40 rounded-lg border border-outline-variant/30 text-center">
+<div class="text-[10px] uppercase text-on-surface-variant font-bold mb-1">Max Abuse Score</div>
+<div class="text-title-lg font-bold text-red-400">{{max_abuse_score}}/100</div>
+</div>
+<div class="p-4 bg-slate-800/40 rounded-lg border border-outline-variant/30 text-center">
+<div class="text-[10px] uppercase text-on-surface-variant font-bold mb-1">Source IPs</div>
+<div class="text-title-lg font-bold text-primary">{{unique_ips}}</div>
+</div>
+<div class="p-4 bg-slate-800/40 rounded-lg border border-outline-variant/30 text-center">
+<div class="text-[10px] uppercase text-on-surface-variant font-bold mb-1">Tor Nodes</div>
+<div class="text-title-lg font-bold text-orange-400">{{tor_nodes}}</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Findings Table Section -->
+<div class="card overflow-hidden">
+<div class="px-unit-md py-5 border-b border-outline-variant flex justify-between items-center">
+<div>
+<h3 class="text-body-lg font-bold">Recent Security Findings</h3>
+<p class="text-label-sm text-on-surface-variant">Last 24 hours activity log</p>
+</div>
+<div class="flex gap-3">
+<a href="/export" class="px-4 py-2 text-label-md border border-outline-variant rounded-lg hover:bg-surface-container-high transition-colors font-bold text-on-surface-variant">Export CSV</a>
+<button id="filterBtn" class="px-6 py-2 text-label-md bg-primary text-on-primary rounded-lg font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+                            Filter
+                        </button>
+</div>
+</div>
+<div class="overflow-x-auto custom-scrollbar">
+<table class="w-full text-left border-collapse min-w-[1200px]">
+<thead>
+<tr class="bg-surface-container-low/80">
+<th class="px-6 py-4 text-[11px] font-bold text-on-surface-variant uppercase tracking-wider border-b border-outline-variant">Time</th>
+<th class="px-6 py-4 text-[11px] font-bold text-on-surface-variant uppercase tracking-wider border-b border-outline-variant text-center">Severity</th>
+<th class="px-6 py-4 text-[11px] font-bold text-on-surface-variant uppercase tracking-wider border-b border-outline-variant">IAM User</th>
+<th class="px-6 py-4 text-[11px] font-bold text-on-surface-variant uppercase tracking-wider border-b border-outline-variant">Honey Bucket</th>
+<th class="px-6 py-4 text-[11px] font-bold text-on-surface-variant uppercase tracking-wider border-b border-outline-variant">AWS Action</th>
+<th class="px-6 py-4 text-[11px] font-bold text-on-surface-variant uppercase tracking-wider border-b border-outline-variant">Source IP</th>
+<th class="px-6 py-4 text-[11px] font-bold text-on-surface-variant uppercase tracking-wider border-b border-outline-variant">Country</th>
+<th class="px-6 py-4 text-[11px] font-bold text-on-surface-variant uppercase tracking-wider border-b border-outline-variant text-right">Abuse Score</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30">
+
+{% for finding in findings|reverse %}
+
+<tr class="hover:bg-slate-800/40 transition-colors group">
+
+    <td class="px-6 py-4 text-label-sm font-mono text-on-surface-variant">
+        {{ finding.event_time }}
+    </td>
+
+    <td class="px-6 py-4">
+        <div class="flex justify-center">
+
+            <span class="
+            {% if finding.severity == 'Critical' %}
+                severity-critical
+            {% elif finding.severity == 'High' %}
+                severity-high
+            {% else %}
+                severity-medium
+            {% endif %}
+            px-2 py-0.5 rounded text-[10px] font-bold">
+
+                {{ finding.severity }}
+
+            </span>
+
+        </div>
+    </td>
+    <td class="px-6 py-4 text-label-md font-bold text-primary">
+        {{ finding.username }}
+    </td>
+    <td class="px-6 py-4 text-label-md text-on-surface">
+        N/A
+    </td>
+    <td class="px-6 py-4 text-label-md text-on-surface italic">
+        {{ finding.event_name }}
+    </td>
+    <td class="px-6 py-4 text-label-md font-mono text-on-surface">
+        {{ finding.source_ip }}
+    </td>
+    <td class="px-6 py-4 text-body-md">
+        {{ finding.country }}
+    </td>
+    <td class="px-6 py-4 text-right">
+        <span class="
+        {% if finding.abuse_score >= 75 %}
+            abuse-high
+        {% elif finding.abuse_score >= 25 %}
+            abuse-mid
+        {% else %}
+            abuse-low
+        {% endif %}
+        px-2 py-0.5 rounded text-[10px] font-bold">
+            {{ finding.abuse_score }}/100
+        </span>
+    </td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+<div class="px-6 py-4 bg-surface-container-low border-t border-outline-variant flex justify-between items-center">
+<span class="text-label-sm text-on-surface-variant">Showing {{ findings|length }} findings</span>
+<div class="flex gap-2">
+<button class="p-1.5 hover:bg-slate-700 rounded border border-outline-variant/30 text-on-surface-variant transition-colors"><span class="material-symbols-outlined">chevron_left</span></button>
+<button class="p-1.5 hover:bg-slate-700 rounded border border-outline-variant/30 text-on-surface-variant transition-colors"><span class="material-symbols-outlined">chevron_right</span></button>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="mt-auto border-t border-outline-variant/30 bg-background/50 py-4 px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-4 text-on-surface-variant">
+<span class="text-[11px] font-medium opacity-80 uppercase tracking-widest">TrailTrap Version 1.0 | Cloud Deception Platform | Powered by AWS CloudTrail, AbuseIPDB, Flask</span>
+<div class="flex gap-6">
+<a class="text-[11px] font-bold hover:text-primary transition-colors uppercase tracking-wider" href="#">Support</a>
+<a class="text-[11px] font-bold hover:text-primary transition-colors uppercase tracking-wider" href="#">Documentation</a>
+<a class="text-[11px] font-bold hover:text-primary transition-colors uppercase tracking-wider" href="#">Privacy</a>
+</div>
+</footer>
+</main>
+
+<!-- Filter Popup -->
+<div
+    id="filterPopup"
+    class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 transition-opacity duration-300">
+    <div
+        id="filterModal"
+        class="bg-surface w-[500px] rounded-2xl border border-outline-variant shadow-2xl p-6 scale-95 opacity-0 transition-all duration-300">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-bold">
+                Filter Findings
+            </h2>
+            <button id="closeFilter">
+                ✕
+            </button>
+        </div>
+        <form method="GET" class="space-y-5">
+            <!-- Severity -->
+            <div>
+                <label class="block mb-2">
+                    Severity
+                </label>
+                <select
+                    name="severity"
+                    class="w-full p-3 rounded-lg bg-surface-container border border-outline-variant">
+                    <option value="">All</option>
+                    {% for severity in severity_options %}
+                    <option
+                        value="{{ severity }}"
+                        {% if severity==severity_filter %}selected{% endif %}>
+                        {{ severity }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <!-- Country -->
+            <div>
+                <label class="block mb-2">
+                    Country
+                </label>
+                <select
+                    name="country"
+                    class="w-full p-3 rounded-lg bg-surface-container border border-outline-variant">
+                    <option value="">All</option>
+                    {% for country in country_options %}
+                    <option
+                        value="{{ country }}"
+                        {% if country==country_filter %}selected{% endif %}>
+                        {{ COUNTRY_NAMES.get(country,country) }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <!-- User -->
+            <div>
+                <label class="block mb-2">
+                    IAM User
+                </label>
+                <select
+                    name="user"
+                    class="w-full p-3 rounded-lg bg-surface-container border border-outline-variant">
+                    <option value="">All</option>
+                    {% for user in user_options %}
+                    <option
+                        value="{{ user }}"
+                        {% if user==user_filter %}selected{% endif %}>
+                        {{ user }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="flex justify-end gap-3 mt-8">
+                <a
+                    href="/"
+                    class="px-5 py-3 rounded-lg border border-outline-variant">
+                    Reset
+                </a>
+                <button
+                    type="submit"
+                    class="px-5 py-3 rounded-lg bg-primary text-on-primary">
+                    Apply Filters
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- FAB -->
+
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-primary text-on-primary rounded-full shadow-2xl shadow-primary/20 flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50">
+<span class="material-symbols-outlined text-[28px]">add</span>
+</button>
+<script>
+        console.log('TrailTrap Dashboard v1.0 Enterprise Initialized');
+        
+        // Refresh simulation
+        setInterval(() => {
+            const refreshBtn = document.querySelector('header button .material-symbols-outlined');
+            if(refreshBtn) {
+                refreshBtn.classList.add('animate-spin');
+                setTimeout(() => refreshBtn.classList.remove('animate-spin'), 1000);
+            }
+        }, 12000);
+    </script>
+
+<script>
+setInterval(function () {
+    location.reload();
+}, 10000); // Refresh every 10 seconds
+</script>
+
+<script>
+const popup = document.getElementById("filterPopup");
+const modal = document.getElementById("filterModal");
+document.getElementById("filterBtn").onclick = () => {
+    popup.classList.remove("hidden");
+    setTimeout(() => {
+        modal.classList.remove("scale-95", "opacity-0");
+        modal.classList.add("scale-100", "opacity-100");
+    }, 10);
+};
+document.getElementById("closeFilter").onclick = closePopup;
+popup.onclick = function(e){
+    if(e.target === popup){
+        closePopup();
+    }
+}
+function closePopup(){
+    modal.classList.remove("scale-100", "opacity-100");
+    modal.classList.add("scale-95", "opacity-0");
+    setTimeout(() => {
+        popup.classList.add("hidden");
+    },300);
+}
+</script>
+</body></html>
