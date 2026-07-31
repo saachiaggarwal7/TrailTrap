@@ -28,6 +28,7 @@ def dashboard():
     severity_filter = request.args.get("severity", "")
     country_filter = request.args.get("country", "")
     user_filter = request.args.get("user", "")
+    search_query = request.args.get("search", "").strip().lower()
     filtered_findings = findings
     if severity_filter:
         filtered_findings = [
@@ -45,6 +46,16 @@ def dashboard():
         f for f in filtered_findings
         if f["username"] == user_filter
         ]
+    if search_query:
+        filtered_findings = [
+        f for f in filtered_findings
+        if (
+            search_query in f["username"].lower()
+            or search_query in f["source_ip"].lower()
+            or search_query in f["event_name"].lower()
+            or search_query in f["country"].lower()
+        )
+    ]
     severity_options = sorted(
     set(f["severity"] for f in findings)
     )
@@ -58,43 +69,43 @@ def dashboard():
     total_findings = len(filtered_findings)
 
     critical_count = sum(
-        1 for f in findings
+        1 for f in filtered_findings
         if f["severity"] == "Critical"
     )
 
     high_count = sum(
-        1 for f in findings
+        1 for f in filtered_findings
         if f["severity"] == "High"
     )
 
     medium_count = sum(
-        1 for f in findings
+        1 for f in filtered_findings
         if f["severity"] == "Medium"
     )
-    latest_finding = findings[-1] if findings else None
+    latest_finding = filtered_findings[-1] if filtered_findings else None
     latest_event_time = latest_finding["event_time"] if latest_finding else "No Events"
     honey_users = len(HONEY_USERNAMES)
     honey_buckets = len(HONEY_BUCKETNAMES)
     decoy_files = 0
     for user in HONEY_USERS:
         decoy_files += len(user["files"])
-    unique_ips = len(set(f["source_ip"] for f in findings))
-    max_abuse_score = max(  (f["abuse_score"] for f in findings),default=0)
+    unique_ips = len(set(f["source_ip"] for f in filtered_findings))
+    max_abuse_score = max(  (f["abuse_score"] for f in filtered_findings),default=0)
     tor_nodes = sum(1 
-                    for f in findings
+                    for f in filtered_findings
                     if f["is_tor"])
     average_abuse_score = (
         round(
-            sum(f["abuse_score"] for f in findings) / len(findings),
+            sum(f["abuse_score"] for f in filtered_findings) / len(filtered_findings),
             1
-        )if findings else 0)
+        )if filtered_findings else 0)
     return render_template(
         "index.html",
         total_findings=total_findings,
         critical_count=critical_count,
         high_count=high_count,
         medium_count=medium_count,
-        findings=findings,
+        findings=filtered_findings,
         latest_finding=latest_finding,
         latest_event_time=latest_event_time,
         honey_users=honey_users,
@@ -113,6 +124,7 @@ def dashboard():
         severity_filter=severity_filter,
         country_filter=country_filter,
         user_filter=user_filter,
+        search_query=search_query,
     )
 
 
