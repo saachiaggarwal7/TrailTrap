@@ -361,12 +361,42 @@ px-2 py-0.5 rounded text-[10px] font-bold text-center w-fit">
 <h3 class="text-body-lg font-bold">Recent Security Findings</h3>
 <p class="text-label-sm text-on-surface-variant">Last 24 hours activity log</p>
 </div>
-<div class="flex gap-3">
-<a href="/export" class="px-4 py-2 text-label-md border border-outline-variant rounded-lg hover:bg-surface-container-high transition-colors font-bold text-on-surface-variant">Export CSV</a>
-<button id="filterBtn" class="px-6 py-2 text-label-md bg-primary text-on-primary rounded-lg font-bold flex items-center gap-2">
-<span class="material-symbols-outlined text-[18px]">filter_list</span>
-                            Filter
-                        </button>
+<div class="flex items-center gap-3">
+    <!-- Search -->
+    <form method="GET" class="flex items-center gap-2">
+        <!-- Keep existing filters -->
+        <input type="hidden" name="severity" value="{{ severity_filter }}">
+        <input type="hidden" name="country" value="{{ country_filter }}">
+        <input type="hidden" name="user" value="{{ user_filter }}">
+        <div class="relative">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">
+                search
+            </span>
+            <input
+                type="text"
+                name="search"
+                value="{{ search_query }}"
+                placeholder="Search..."
+                class="pl-10 pr-4 py-2 w-72 rounded-lg bg-surface-container border border-outline-variant">
+        </div>
+        <button
+        type="submit"
+        class="px-4 py-2 bg-primary text-on-primary rounded-lg font-bold">
+        Search
+    </button>
+    </form>
+    <a href="/export"
+       class="px-4 py-2 text-label-md border border-outline-variant rounded-lg hover:bg-surface-container-high transition-colors font-bold text-on-surface-variant">
+        Export CSV
+    </a>
+    <button
+        id="filterBtn"
+        class="px-6 py-2 text-label-md bg-primary text-on-primary rounded-lg font-bold flex items-center gap-2">
+        <span class="material-symbols-outlined text-[18px]">
+            filter_list
+        </span>
+        Filter
+    </button>
 </div>
 </div>
 <div class="overflow-x-auto custom-scrollbar">
@@ -386,7 +416,6 @@ px-2 py-0.5 rounded text-[10px] font-bold text-center w-fit">
 <tbody class="divide-y divide-outline-variant/30">
 
 {% for finding in findings|reverse %}
-
 <tr class="hover:bg-slate-800/40 transition-colors group">
 
     <td class="px-6 py-4 text-label-sm font-mono text-on-surface-variant">
@@ -573,7 +602,7 @@ px-2 py-0.5 rounded text-[10px] font-bold text-center w-fit">
 <script>
 setInterval(function () {
     location.reload();
-}, 10000); // Refresh every 10 seconds
+}, 60000); // Refresh every 60 seconds
 </script>
 
 <script>
