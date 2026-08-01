@@ -161,15 +161,12 @@
                         </span>
 <span class="text-[10px] text-on-surface-variant mt-1">Last Event: {{latest_event_time}}</span>
 </div>
-<button class="p-1 hover:bg-surface-variant rounded-full text-on-surface-variant transition-colors">
+<button id= "refreshBtn" class="p-1 hover:bg-surface-variant rounded-full text-on-surface-variant transition-colors">
 <span class="material-symbols-outlined text-[18px]">refresh</span>
 </button>
 </div>
 <div class="flex gap-2">
-<button class="p-2.5 bg-surface-container hover:bg-surface-variant text-on-surface-variant rounded-xl border border-outline-variant/30 transition-all">
-<span class="material-symbols-outlined text-[20px]">notifications</span>
-</button>
-<button class="p-2.5 bg-surface-container hover:bg-surface-variant text-on-surface-variant rounded-xl border border-outline-variant/30 transition-all">
+<button id="helpBtn" class="p-2.5 bg-surface-container hover:bg-surface-variant text-on-surface-variant rounded-xl border border-outline-variant/30 transition-all hover:scale-110 duration-200">
 <span class="material-symbols-outlined text-[20px]">help</span>
 </button>
 </div>
@@ -241,10 +238,7 @@ px-2 py-0.5 rounded text-[10px] font-bold text-center w-fit">
 <span class="text-[10px] uppercase text-on-surface-variant font-bold">IAM User</span>
 <span class="text-label-md font-bold text-primary truncate">{{latest_finding.username}}</span>
 </div>
-<div class="flex flex-col gap-1">
-<span class="text-[10px] uppercase text-on-surface-variant font-bold">Honey Bucket</span>
-<span class="text-label-md text-on-surface truncate">N/A</span>
-</div>
+
 <div class="flex flex-col gap-1">
 <span class="text-[10px] uppercase text-on-surface-variant font-bold">AWS Action</span>
 <span class="text-label-md text-on-surface italic truncate">{{ latest_finding.event_name }}</span>
@@ -268,92 +262,160 @@ px-2 py-0.5 rounded text-[10px] font-bold text-center w-fit">
 </div>
 </div>
 </div>
+
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
-<!-- Honey Assets Widget (New Widget) -->
-<div class="lg:col-span-3 card">
-<div class="px-unit-md py-4 border-b border-outline-variant flex items-center gap-2">
-<span class="material-symbols-outlined text-primary text-[20px]">inventory_2</span>
-<h3 class="text-body-lg font-bold">Honey Assets</h3>
-</div>
-<div class="p-unit-md space-y-4">
-<div class="flex items-center justify-between p-3 bg-surface-container-low rounded-lg border border-outline-variant/30">
-<div class="flex flex-col">
-<span class="text-label-sm text-on-surface-variant">Honey IAM Users</span>
-<span class="text-headline-md font-bold text-primary">{{honey_users}}</span>
-</div>
-<span class="material-symbols-outlined text-primary/40">person_add</span>
-</div>
-<div class="flex items-center justify-between p-3 bg-surface-container-low rounded-lg border border-outline-variant/30">
-<div class="flex flex-col">
-<span class="text-label-sm text-on-surface-variant">Honey Buckets</span>
-<span class="text-headline-md font-bold text-primary">{{honey_buckets}}</span>
-</div>
-<span class="material-symbols-outlined text-primary/40">folder_zip</span>
-</div>
-<div class="flex items-center justify-between p-3 bg-surface-container-low rounded-lg border border-outline-variant/30">
-<div class="flex flex-col">
-<span class="text-label-sm text-on-surface-variant">Decoy Files</span>
-<span class="text-headline-md font-bold text-primary">{{decoy_files}}</span>
-</div>
-<span class="material-symbols-outlined text-primary/40">description</span>
-</div>
-</div>
-</div>
-<!-- Top Sources -->
- <div class="p-unit-md space-y-5">
 
-{% for country, hits in top_countries %}
+    <!-- Severity Distribution -->
+    <div class="lg:col-span-3 card">
 
-<div class="space-y-2">
+        <div class="px-unit-md py-4 border-b border-outline-variant">
+            <h3 class="text-body-lg font-bold">
+                Severity Distribution
+            </h3>
+        </div>
 
-    <div class="flex justify-between text-label-md text-on-surface-variant font-medium">
+        <div class="p-6 flex justify-center">
 
-        <span>
-            {{ COUNTRY_NAMES.get(country, country) }}
-        </span>
+            <div class="w-56 h-56">
 
-        <span>
-            {{ hits }} hit{{ '' if hits == 1 else 's' }}
-        </span>
+                <canvas id="severityChart"></canvas>
+
+            </div>
+
+        </div>
 
     </div>
 
-    <div class="h-2 bg-slate-800 rounded-full overflow-hidden">
+    <!-- Top Countries -->
+    <div class="lg:col-span-6 card">
 
-        <div
-            class="h-full bg-primary rounded-full shadow-[0_0_8px_rgba(193,198,219,0.3)]"
-            style="width: {{ (hits / max_country_hits) * 100 }}%">
+        <div class="px-unit-md py-4 border-b border-outline-variant flex justify-between">
+
+            <h3 class="text-body-lg font-bold">
+
+                Top Source Countries
+
+            </h3>
+
+            <span class="text-label-sm">
+
+                Detection Sources
+
+            </span>
+
+        </div>
+
+        <div class="p-unit-md space-y-5">
+
+            {% for country, hits in top_countries %}
+
+            <div class="space-y-2">
+
+                <div class="flex justify-between text-label-md">
+
+                    <span>
+
+                        {{ COUNTRY_NAMES.get(country,country) }}
+
+                    </span>
+
+                    <span>
+
+                        {{ hits }} hit{{ '' if hits==1 else 's' }}
+
+                    </span>
+
+                </div>
+
+                <div class="h-2 bg-slate-800 rounded-full overflow-hidden">
+
+                    <div
+
+                        class="h-full bg-primary rounded-full"
+
+                        style="width: {{ (hits/max_country_hits)*100 }}%">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+    <!-- Threat Intelligence -->
+    <div class="lg:col-span-3 card">
+
+        <div class="px-unit-md py-4 border-b border-outline-variant">
+
+            <h3 class="text-body-lg font-bold">
+
+                Threat Intelligence
+
+            </h3>
+
+        </div>
+
+        <div class="p-unit-md grid gap-3">
+
+            <div class="p-4 bg-slate-800/40 rounded-lg text-center">
+
+                <div class="text-[10px] uppercase">
+
+                    Max Abuse Score
+
+                </div>
+
+                <div class="text-title-lg font-bold text-red-400">
+
+                    {{ max_abuse_score }}/100
+
+                </div>
+
+            </div>
+
+            <div class="p-4 bg-slate-800/40 rounded-lg text-center">
+
+                <div class="text-[10px] uppercase">
+
+                    Source IPs
+
+                </div>
+
+                <div class="text-title-lg font-bold">
+
+                    {{ unique_ips }}
+
+                </div>
+
+            </div>
+
+            <div class="p-4 bg-slate-800/40 rounded-lg text-center">
+
+                <div class="text-[10px] uppercase">
+
+                    Tor Nodes
+
+                </div>
+
+                <div class="text-title-lg font-bold text-orange-400">
+
+                    {{ tor_nodes }}
+
+                </div>
+
+            </div>
+
         </div>
 
     </div>
 
 </div>
 
-{% endfor %}
-
-</div>
-<!-- Threat Intel -->
-<div class="lg:col-span-3 card">
-<div class="px-unit-md py-4 border-b border-outline-variant flex items-center gap-2">
-<span class="material-symbols-outlined text-primary">insights</span>
-<h3 class="text-body-lg font-bold">Threat Intelligence</h3>
-</div>
-<div class="p-unit-md grid grid-cols-1 gap-3">
-<div class="p-4 bg-slate-800/40 rounded-lg border border-outline-variant/30 text-center">
-<div class="text-[10px] uppercase text-on-surface-variant font-bold mb-1">Max Abuse Score</div>
-<div class="text-title-lg font-bold text-red-400">{{max_abuse_score}}/100</div>
-</div>
-<div class="p-4 bg-slate-800/40 rounded-lg border border-outline-variant/30 text-center">
-<div class="text-[10px] uppercase text-on-surface-variant font-bold mb-1">Source IPs</div>
-<div class="text-title-lg font-bold text-primary">{{unique_ips}}</div>
-</div>
-<div class="p-4 bg-slate-800/40 rounded-lg border border-outline-variant/30 text-center">
-<div class="text-[10px] uppercase text-on-surface-variant font-bold mb-1">Tor Nodes</div>
-<div class="text-title-lg font-bold text-orange-400">{{tor_nodes}}</div>
-</div>
-</div>
-</div>
-</div>
 <!-- Findings Table Section -->
 <div class="card overflow-hidden">
 <div class="px-unit-md py-5 border-b border-outline-variant flex justify-between items-center">
@@ -406,7 +468,6 @@ px-2 py-0.5 rounded text-[10px] font-bold text-center w-fit">
 <th class="px-6 py-4 text-[11px] font-bold text-on-surface-variant uppercase tracking-wider border-b border-outline-variant">Time</th>
 <th class="px-6 py-4 text-[11px] font-bold text-on-surface-variant uppercase tracking-wider border-b border-outline-variant text-center">Severity</th>
 <th class="px-6 py-4 text-[11px] font-bold text-on-surface-variant uppercase tracking-wider border-b border-outline-variant">IAM User</th>
-<th class="px-6 py-4 text-[11px] font-bold text-on-surface-variant uppercase tracking-wider border-b border-outline-variant">Honey Bucket</th>
 <th class="px-6 py-4 text-[11px] font-bold text-on-surface-variant uppercase tracking-wider border-b border-outline-variant">AWS Action</th>
 <th class="px-6 py-4 text-[11px] font-bold text-on-surface-variant uppercase tracking-wider border-b border-outline-variant">Source IP</th>
 <th class="px-6 py-4 text-[11px] font-bold text-on-surface-variant uppercase tracking-wider border-b border-outline-variant">Country</th>
@@ -443,9 +504,6 @@ px-2 py-0.5 rounded text-[10px] font-bold text-center w-fit">
     </td>
     <td class="px-6 py-4 text-label-md font-bold text-primary">
         {{ finding.username }}
-    </td>
-    <td class="px-6 py-4 text-label-md text-on-surface">
-        N/A
     </td>
     <td class="px-6 py-4 text-label-md text-on-surface italic">
         {{ finding.event_name }}
@@ -485,12 +543,7 @@ px-2 py-0.5 rounded text-[10px] font-bold text-center w-fit">
 </div>
 <!-- Footer -->
 <footer class="mt-auto border-t border-outline-variant/30 bg-background/50 py-4 px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-4 text-on-surface-variant">
-<span class="text-[11px] font-medium opacity-80 uppercase tracking-widest">TrailTrap Version 1.0 | Cloud Deception Platform | Powered by AWS CloudTrail, AbuseIPDB, Flask</span>
-<div class="flex gap-6">
-<a class="text-[11px] font-bold hover:text-primary transition-colors uppercase tracking-wider" href="#">Support</a>
-<a class="text-[11px] font-bold hover:text-primary transition-colors uppercase tracking-wider" href="#">Documentation</a>
-<a class="text-[11px] font-bold hover:text-primary transition-colors uppercase tracking-wider" href="#">Privacy</a>
-</div>
+<span class="text-[11px] font-medium opacity-80 uppercase tracking-widest">TrailTrap | Cloud Deception Platform | Powered by AWS CloudTrail, AbuseIPDB, Flask</span>
 </footer>
 </main>
 
@@ -583,21 +636,20 @@ px-2 py-0.5 rounded text-[10px] font-bold text-center w-fit">
 
 <!-- FAB -->
 
-<button class="fixed bottom-8 right-8 w-14 h-14 bg-primary text-on-primary rounded-full shadow-2xl shadow-primary/20 flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50">
-<span class="material-symbols-outlined text-[28px]">add</span>
-</button>
+
 <script>
-        console.log('TrailTrap Dashboard v1.0 Enterprise Initialized');
+    console.log('TrailTrap Dashboard v1.0 Enterprise Initialized');
         
-        // Refresh simulation
-        setInterval(() => {
-            const refreshBtn = document.querySelector('header button .material-symbols-outlined');
-            if(refreshBtn) {
-                refreshBtn.classList.add('animate-spin');
-                setTimeout(() => refreshBtn.classList.remove('animate-spin'), 1000);
-            }
-        }, 12000);
-    </script>
+    // Refresh simulation
+    const refreshBtn = document.getElementById("refreshBtn");
+    refreshBtn.addEventListener("click", function () {
+    const icon = this.querySelector(".material-symbols-outlined");
+    icon.classList.add("animate-spin");
+    setTimeout(() => {
+        location.reload();
+    }, 500);
+});
+</script>
 
 <script>
 setInterval(function () {
@@ -628,5 +680,125 @@ function closePopup(){
         popup.classList.add("hidden");
     },300);
 }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+
+const ctx = document.getElementById("severityChart");
+
+new Chart(ctx, {
+    type: "doughnut",
+    data: {
+        labels: ["Critical","High","Medium"],
+        datasets:[{
+            data:[
+                {{critical_count}},
+                {{high_count}},
+                {{medium_count}}
+            ],
+            backgroundColor:[
+                "#ef4444",
+                "#f97316",
+                "#eab308"
+            ],
+            borderWidth:0,
+            hoverOffset:8
+        }]
+    },
+    options:{
+        maintainAspectRatio:false,
+        cutout:"72%",
+        plugins:{
+            legend:{
+                position:"bottom",
+                labels:{
+                    color:"#ffffff",
+                    boxWidth:15,
+                    padding:20
+                }
+            }
+        }
+    }
+});
+</script>
+
+<!-- Help Modal -->
+<div id="helpModal"
+     class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50">
+    <div class="bg-surface w-[650px] max-w-[95%] rounded-2xl border border-outline-variant shadow-2xl p-6">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold">
+                TrailTrap Help
+            </h2>
+            <button id="closeHelp"
+                    class="text-2xl hover:text-red-400">
+                ✕
+            </button>
+        </div>
+        <div class="space-y-5 text-sm leading-6">
+            <div>
+                <h3 class="font-bold text-primary mb-1">
+                    About
+                </h3>
+                <p>
+                    TrailTrap is a cloud deception and threat monitoring dashboard.
+                    It monitors AWS CloudTrail activity, detects interactions with
+                    honey IAM users and honey buckets, enriches attacker IPs using
+                    AbuseIPDB, and visualizes findings in real time.
+                </p>
+            </div>
+            <div>
+                <h3 class="font-bold text-primary mb-1">
+                    Severity Levels
+                </h3>
+                <ul class="list-disc ml-5 space-y-1">
+                    <li><b>Critical</b> - Abuse Score ≥ 75</li>
+                    <li><b>High</b> - Abuse Score 25-74</li>
+                    <li><b>Medium</b> - Abuse Score &lt; 25</li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="font-bold text-primary mb-1">
+                    Dashboard Controls
+                </h3>
+                <ul class="list-disc ml-5 space-y-1">
+                    <li>🔄 Refresh - Reload latest findings</li>
+                    <li>🔍 Search - Search by user, IP, event or country</li>
+                    <li>🎯 Filter - Filter by severity, country or IAM user</li>
+                    <li>📄 Export CSV - Download all findings</li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="font-bold text-primary mb-1">
+                    Data Sources
+                </h3>
+                <p>
+                    AWS CloudTrail • AbuseIPDB • Flask • Chart.js
+                </p>
+            </div>
+            <div class="pt-3 border-t border-outline-variant text-center text-xs text-gray-400">
+                TrailTrap 
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+const helpBtn = document.getElementById("helpBtn");
+const helpModal = document.getElementById("helpModal");
+const closeHelp = document.getElementById("closeHelp");
+helpBtn.addEventListener("click", () => {
+    helpModal.classList.remove("hidden");
+    helpModal.classList.add("flex");
+});
+closeHelp.addEventListener("click", () => {
+    helpModal.classList.remove("flex");
+    helpModal.classList.add("hidden");
+});
+helpModal.addEventListener("click", function(e){
+    if(e.target === helpModal){
+        helpModal.classList.remove("flex");
+        helpModal.classList.add("hidden");
+    }
+});
 </script>
 </body></html>
