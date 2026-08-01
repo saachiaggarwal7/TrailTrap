@@ -1,7 +1,7 @@
 import json
 import os
 
-FINDINGS_FILE="findings.jsonl"
+FINDINGS_FILE="findings.json"
 
 def create_finding(event_details,reputation):
     if reputation is None:
