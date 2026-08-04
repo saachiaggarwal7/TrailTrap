@@ -91,4 +91,26 @@ TrailTrap classifies incidents based on AbuseIPDB Abuse Confidence Score.
 ```
 
 ---
+# Screenshots
 
+## Dashboard Overview
+
+![TrailTrap Dashboard](images/dashboard.png)
+
+---
+
+## Filter Findings
+
+![Filter Popup](images/filter.png)
+
+---
+
+## Help Dialog
+
+![Help Popup](images/help.png)
+
+---
+
+## Terminal Detection Alert
+
+![Terminal Alert](images/terminal-alert.png)
