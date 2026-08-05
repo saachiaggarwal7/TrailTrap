@@ -114,3 +114,38 @@ TrailTrap classifies incidents based on AbuseIPDB Abuse Confidence Score.
 ## Terminal Detection Alert
 
 ![Terminal Alert](images/terminal-alert.png)
+
+## Installation
+
+1. Clone the repository
+
+```bash
+git clone https://github.com/<your-username>/TrailTrap.git
+cd TrailTrap
+```
+
+2. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+3. Configure AWS credentials
+
+```bash
+aws configure
+```
+
+or export the credentials as environment variables.
+
+4. Create a `.env` file
+
+```env
+ABUSEIPDB_API_KEY=your_api_key_here
+```
+
+5. Run the application
+
+```bash
+python app.py
+```
